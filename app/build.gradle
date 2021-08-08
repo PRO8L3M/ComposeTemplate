@@ -52,6 +52,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
     implementation project(':core')
     implementation project(':data')
@@ -60,6 +64,9 @@ dependencies {
     implementation "androidx.core:core-ktx:$libVersion.coreKtx"
     implementation "androidx.appcompat:appcompat:$libVersion.appCompat"
     implementation "com.google.android.material:material:$libVersion.material"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersion.coroutines"
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$libVersion.hilt"

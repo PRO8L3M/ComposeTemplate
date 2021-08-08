@@ -39,6 +39,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$libVersion.appCompat"
     implementation "com.google.android.material:material:$libVersion.material"
 
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$libVersion.coroutines"
+
     // Testing
     testImplementation "junit:junit:$libVersion.junit"
     androidTestImplementation "androidx.test.ext:junit:$libVersion.junitExt"
