@@ -1,7 +1,21 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
+plugins {
+    id 'com.google.devtools.ksp' version '1.6.10-1.0.2'
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+kotlin {
+    sourceSets {
+        debug {
+            kotlin.srcDir("build/generated/ksp/debug/kotlin")
+        }
+        release {
+            kotlin.srcDir("build/generated/ksp/release/kotlin")
+        }
+    }
+}
 
 android {
     compileSdk androidVersion.compileSdkVersion
@@ -32,7 +46,6 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion kotlinVersion
         kotlinCompilerExtensionVersion libVersion.compose
     }
 
@@ -71,6 +84,7 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:$libVersion.hilt"
     kapt "com.google.dagger:hilt-compiler:$libVersion.hilt"
+    implementation "androidx.hilt:hilt-navigation-compose:$libVersion.hiltNavigationCompose"
 
     //Compose
     implementation "androidx.compose.ui:ui:$libVersion.compose"
@@ -78,6 +92,9 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$libVersion.compose"
     debugImplementation "androidx.compose.ui:ui-tooling:$libVersion.compose"
     implementation "androidx.activity:activity-compose:$libVersion.activityCompose"
+
+    implementation 'io.github.raamcosta.compose-destinations:core:1.1.3-beta'
+    ksp 'io.github.raamcosta.compose-destinations:ksp:1.1.3-beta'
 
     // Ktx lifecycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$libVersion.ktxLifecycle"
