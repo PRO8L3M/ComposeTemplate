@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 
 @InstallIn(SingletonComponent::class)
 @Module
-interface DataModule {
+interface DataStoreModule {
 
     companion object {
         @Provides

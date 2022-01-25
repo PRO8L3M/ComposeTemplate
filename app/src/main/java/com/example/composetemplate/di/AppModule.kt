@@ -5,5 +5,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 @InstallIn(SingletonComponent::class)
-@Module
+@Module(includes = [DataStoreModule::class])
 interface AppModule
+
+//todo Where include DataStore Module

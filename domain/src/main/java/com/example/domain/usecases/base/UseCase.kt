@@ -1,4 +1,4 @@
-package com.example.domain.usecases
+package com.example.domain.usecases.base
 
 import kotlinx.coroutines.*
 
@@ -8,11 +8,10 @@ abstract class UseCase<in Params, out Type> {
 
     operator fun invoke(
         scope: CoroutineScope,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
         params: Params,
         onSuccess: (Type) -> Unit = {},
         onFailure: (Throwable) -> Unit = {}
-    ): Job = scope.launch(dispatcher) {
+    ): Job = scope.launch {
         runCatching { run(params) }
             .onSuccess { onSuccess(it) }
             .onFailure { onFailure(it) }

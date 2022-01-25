@@ -1,7 +1,10 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
+
+apply from: "$rootDir/tools/product-flavors-script.gradle"
 
 android {
     compileSdk androidVersion.compileSdkVersion
@@ -44,8 +47,21 @@ dependencies {
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$libVersion.coroutines"
 
+    // Networking
+    api "com.squareup.retrofit2:retrofit:$libVersion.retrofit"
+    api "com.squareup.retrofit2:converter-moshi:$libVersion.retrofit"
+    api "com.squareup.okhttp3:logging-interceptor:$libVersion.loggingInterceptor"
+
+    // DI
+    implementation "com.google.dagger:hilt-core:$libVersion.hilt"
+    kapt "com.google.dagger:hilt-compiler:$libVersion.hilt"
+
     // DataStore - Preferences
     implementation "androidx.datastore:datastore-preferences:$libVersion.dataStore"
+
+    // Serialization
+    implementation "com.squareup.moshi:moshi-kotlin:$libVersion.moshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$libVersion.moshi"
 
     // Testing
     testImplementation "junit:junit:$libVersion.junit"

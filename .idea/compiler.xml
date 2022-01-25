@@ -5,6 +5,9 @@
       <module name="Compose_Template.app" target="11" />
       <module name="Compose_Template.core" target="11" />
       <module name="Compose_Template.data" target="11" />
+      <module name="Compose_Template.feature.myapplication" target="11" />
+      <module name="Compose_Template.feature.ui-dashboard" target="11" />
+      <module name="Compose_Template.navigation" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

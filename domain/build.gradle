@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'kotlin'
+    id 'kotlin-kapt'
 }
 
 java {
@@ -9,6 +10,15 @@ java {
 }
 
 dependencies {
+
+    // Serialization
+    implementation "com.squareup.moshi:moshi-kotlin:$libVersion.moshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$libVersion.moshi"
+
+    // DI
+    implementation "com.google.dagger:hilt-core:$libVersion.hilt"
+    kapt "com.google.dagger:hilt-compiler:$libVersion.hilt"
+
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$libVersion.coroutines"
     implementation "javax.inject:javax.inject:1"
 }

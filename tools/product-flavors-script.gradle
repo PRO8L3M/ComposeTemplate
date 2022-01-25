@@ -1,0 +1,15 @@
+android {
+    flavorDimensions "type"
+
+    productFlavors {
+        dev {
+            buildConfigField "String", "API_URL", '"https://peaceful-island-34483.herokuapp.com/"'
+        }
+        stage {
+            buildConfigField "String", "API_URL", '"https://peaceful-island-34483.herokuapp.com/"'
+        }
+        production {
+            buildConfigField "String", "API_URL", '"https://peaceful-island-34483.herokuapp.com/"'
+        }
+    }
+}

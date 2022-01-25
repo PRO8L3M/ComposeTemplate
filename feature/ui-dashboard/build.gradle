@@ -1,0 +1,76 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+apply from: "$rootDir/tools/product-flavors-script.gradle"
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 23
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libVersion.compose
+    }
+
+    buildFeatures {
+        compose true
+    }
+}
+
+kapt {
+    correctErrorTypes true
+}
+
+
+dependencies {
+    implementation project(':core')
+    implementation project(':domain')
+    implementation project(':navigation')
+
+    //Compose
+    implementation "androidx.compose.ui:ui:$libVersion.compose"
+    implementation "androidx.compose.material:material:$libVersion.compose"
+    implementation "androidx.compose.ui:ui-tooling-preview:$libVersion.compose"
+    debugImplementation "androidx.compose.ui:ui-tooling:$libVersion.compose"
+    implementation "androidx.activity:activity-compose:$libVersion.activityCompose"
+    implementation"io.coil-kt:coil-compose:$libVersion.composeCoil"
+
+    // DI
+    implementation "com.google.dagger:hilt-core:$libVersion.hilt"
+    kapt "com.google.dagger:hilt-compiler:$libVersion.hilt"
+    implementation "androidx.hilt:hilt-navigation-compose:$libVersion.hiltNavigationCompose"
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}

@@ -3,59 +3,48 @@ package com.example.composetemplate.presentation.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.composetemplate.presentation.main.destinations.DashboardScreenDestination
-import com.example.composetemplate.presentation.main.destinations.ThemeScreenDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.composetemplate.ui.theme.ComposeTemplateTheme
-import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.manualcomposablecalls.composable
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.example.dashboard.main.ui.Dashboard
+import com.example.dashboard.useroverview.ui.UserOverview
+import com.example.navigation.Routes
+import com.example.navigation.extensions.navigateToDestination
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             ComposeTemplateTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    DestinationsNavHost(navGraph = NavGraphs.root)
+                    NavHost(
+                        navController = navController,
+                        startDestination = Routes.Dashboard.route
+                    ) {
+                        composable(Routes.Dashboard.route) {
+                            Dashboard(navController::navigateToDestination)
+                        }
+
+                        composable(Routes.UserOverview.route) {
+                            UserOverview()
+                        }
+                    }
                 }
             }
         }
     }
 }
+/*
 
-@Destination
-@Composable
-fun ThemeScreen(
-    currentValue: Int
-) {
-    Text(text = "Current value: $currentValue")
-}
-
-@Destination(start = true)
 @Composable
 fun DashboardScreen(
     navigator: DestinationsNavigator
@@ -65,12 +54,11 @@ fun DashboardScreen(
     DashboardPage(
         themeMode,
         {
+            navigator.navigate(DashboardNavDestination)
             viewModel.setThemeMode(MainViewModel.LIGHT_MODE)
-            navigator.navigate(ThemeScreenDestination(themeMode))
         },
         {
             viewModel.setThemeMode(MainViewModel.DARK_MODE)
-            navigator.navigate(ThemeScreenDestination(themeMode))
         }
     )
 }
@@ -128,4 +116,4 @@ fun ThemeButton(text: String, onClick: () -> Unit = {}) {
     Button(onClick = onClick) {
         Text(text = text)
     }
-}
+}*/
