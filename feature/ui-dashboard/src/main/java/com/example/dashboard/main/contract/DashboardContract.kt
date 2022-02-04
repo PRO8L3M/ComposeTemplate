@@ -4,6 +4,7 @@ import com.example.core.base.ViewEffect
 import com.example.core.base.ViewEvent
 import com.example.core.base.ViewState
 import com.example.domain.models.users.User
+import com.example.navigation.Destination
 
 object DashboardContract {
 
@@ -19,6 +20,6 @@ object DashboardContract {
     // Effect of Event. e.g. user clicked on navigation button (event) -> navigate to any screen (effect)
     sealed class Effect : ViewEffect {
         data class ShowError(val error: Throwable) : Effect()
-        data class NavigateToUserOverview(val user: User) : Effect()
+        data class Navigation(val destination: Destination) : Effect()
     }
 }

@@ -1,13 +1,14 @@
 package com.example.dashboard.main.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.core.base.BaseViewModel
 import com.example.dashboard.main.contract.DashboardContract
-import com.example.domain.models.users.User
 import com.example.domain.usecases.users.GetAvatarsUseCase
 import com.example.domain.usecases.users.GetUsersUseCase
+import com.example.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -22,25 +23,13 @@ class DashboardViewModel @Inject constructor(
         setEvent(DashboardContract.Event.OnDashboardScreenInit)
     }
 
-    override fun setInitialState(): DashboardContract.State = DashboardContract.State(emptyList(), true)
+    override fun setInitialState(): DashboardContract.State =
+        DashboardContract.State(emptyList(), true)
 
     override fun handleEvents(event: DashboardContract.Event) {
-        when(event) {
+        when (event) {
             is DashboardContract.Event.OnDashboardScreenInit -> getUsers()
             is DashboardContract.Event.OnUserClicked -> navigateToUserOverview(event)
-        }
-    }
-
-    fun onUserClicked(id: Long) {
-        setEvent(DashboardContract.Event.OnUserClicked(id))
-    }
-
-    private fun navigateToUserOverview(event: DashboardContract.Event.OnUserClicked) {
-        val user = viewState.value.users.find { it.id == event.userId }
-        user?.let {
-            setEffect { DashboardContract.Effect.NavigateToUserOverview(user) }
-        } ?: run {
-            setEffect { DashboardContract.Effect.ShowError(NoSuchElementException()) }
         }
     }
 
@@ -48,17 +37,23 @@ class DashboardViewModel @Inject constructor(
         getUsers(
             viewModelScope,
             Unit,
-            ::onGetUsersSuccess,
-            ::onGetUsersError
+            { users ->
+                setState { copy(users = users, showProgressBar = false) }
+            },
+            { error ->
+                setEffect { DashboardContract.Effect.ShowError(error) }
+            }
         )
     }
 
-    private fun onGetUsersSuccess(users: List<User>) {
-        setState { copy(users = users, showProgressBar = false) }
-    }
-
-    private fun onGetUsersError(error: Throwable) {
-        Log.e("Users", error.stackTraceToString())
-        setEffect { DashboardContract.Effect.ShowError(error) }
+    private fun navigateToUserOverview(event: DashboardContract.Event.OnUserClicked) {
+        val user = viewState.value.users.find { it.id == event.userId }
+        user?.let {
+            val routeWithArgument = Routes.UserOverview().route + "/${user.id}"
+            val destination = Routes.UserOverview().copy(route = routeWithArgument)
+            setEffect { DashboardContract.Effect.Navigation(destination) }
+        } ?: run {
+            setEffect { DashboardContract.Effect.ShowError(NoSuchElementException()) }
+        }
     }
 }

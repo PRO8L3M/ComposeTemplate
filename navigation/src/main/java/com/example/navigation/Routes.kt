@@ -5,16 +5,16 @@ import androidx.navigation.NavDeepLink
 
 object Routes {
 
-    object Dashboard : Destination {
-        override val route: String = "dashboard"
-        override val args: List<NamedNavArgument> = emptyList()
+    data class Dashboard(
+        override val route: String = "dashboard",
+        override val args: List<NamedNavArgument> = emptyList(),
         override val deepLinks: List<NavDeepLink> = emptyList()
-    }
+    ) : Destination
 
-    object UserOverview : Destination {
-        override val route: String = "useroverview"
-        override val args: List<NamedNavArgument> = emptyList()
+    data class UserOverview(
+        override val route: String = "useroverview",
+        override val args: List<NamedNavArgument> = emptyList(),
         override val deepLinks: List<NavDeepLink> = emptyList()
-    }
+    ) : Destination
 }
 

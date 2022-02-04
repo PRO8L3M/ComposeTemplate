@@ -15,8 +15,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.ComposeNavigator
+import androidx.navigation.navArgument
 import coil.compose.rememberImagePainter
 import com.example.dashboard.main.contract.DashboardContract
 import com.example.dashboard.main.viewmodel.DashboardViewModel
@@ -36,7 +38,7 @@ fun Dashboard(onNavigationRequest: (Destination) -> Unit = {}) {
     DashboardPage(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
-        onUserClicked = viewModel::onUserClicked,
+        onEvent = viewModel::setEvent,
         onNavigationRequest = onNavigationRequest::invoke
     )
 }
@@ -46,19 +48,19 @@ fun Dashboard(onNavigationRequest: (Destination) -> Unit = {}) {
 fun DashboardPage(
     state: DashboardContract.State,
     effectFlow: Flow<DashboardContract.Effect>?,
-    onUserClicked: (Long) -> Unit,
+    onEvent: (DashboardContract.Event) -> Unit,
     onNavigationRequest: (Destination) -> Unit
 ) {
     val context = LocalContext.current
-    LaunchedEffect(null) {
+    LaunchedEffect(Unit) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is DashboardContract.Effect.ShowError -> {
                     Toast.makeText(context, effect.error.localizedMessage, Toast.LENGTH_SHORT)
                         .show()
                 }
-                is DashboardContract.Effect.NavigateToUserOverview -> {
-                    val destination = Routes.UserOverview
+                is DashboardContract.Effect.Navigation -> {
+                    val destination: Destination = effect.destination
                     onNavigationRequest(destination)
                 }
             }
@@ -70,7 +72,7 @@ fun DashboardPage(
             CircularProgressIndicator()
         }
     } else {
-        Users(state.users, onUserClicked)
+        Users(state.users, onEvent)
     }
 
 }
@@ -78,10 +80,10 @@ fun DashboardPage(
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
-fun Users(users: List<User> = emptyList(), onUserClicked: (Long) -> Unit = {}) {
+fun Users(users: List<User> = emptyList(), onEvent: (DashboardContract.Event) -> Unit = {}) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(users) { user ->
-            UserCell(user, onUserClicked)
+            UserCell(user, onEvent)
         }
     }
 }
@@ -89,8 +91,8 @@ fun Users(users: List<User> = emptyList(), onUserClicked: (Long) -> Unit = {}) {
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
-fun UserCell(user: User = User.buildDefault(), onUserClicked: (Long) -> Unit = {}) {
-    Surface(onClick = { onUserClicked.invoke(user.id) }) {
+fun UserCell(user: User = User.buildDefault(), onEvent: (DashboardContract.Event) -> Unit = {}) {
+    Surface(onClick = { onEvent.invoke(DashboardContract.Event.OnUserClicked(user.id)) }) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

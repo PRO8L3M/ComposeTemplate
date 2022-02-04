@@ -11,15 +11,15 @@ import java.io.IOException
 
 fun Throwable.asRestException(): ApiException {
     return when (this) {
-        is HttpException -> this.asHttpError()
-        is IOException -> this.asNetworkError()
-        else -> this.asUnexpectedError()
+        is HttpException -> asHttpError()
+        is IOException -> asNetworkError()
+        else -> asUnexpectedError()
     }
 }
 
 fun HttpException.asHttpError(): ApiException.Http {
     return ApiException.Http(
-        this.message,
+        message,
         this,
         getErrorList(this)
     )
@@ -27,14 +27,14 @@ fun HttpException.asHttpError(): ApiException.Http {
 
 private fun IOException.asNetworkError(): ApiException.Network {
     return ApiException.Network(
-        this.message,
+        message,
         this
     )
 }
 
 private fun Throwable.asUnexpectedError(): ApiException.Unexpected {
     return ApiException.Unexpected(
-        this.message,
+        message,
         this
     )
 }

@@ -53,6 +53,9 @@ dependencies {
     // Hilt
     implementation "androidx.hilt:hilt-navigation-compose:$libVersion.hiltNavigationCompose"
 
+    // Navigation
+    implementation "com.google.accompanist:accompanist-navigation-animation:$libVersion.accompanist"
+
     implementation "androidx.core:core-ktx:$libVersion.coreKtx"
     implementation "androidx.appcompat:appcompat:$libVersion.appCompat"
     implementation "com.google.android.material:material:$libVersion.material"

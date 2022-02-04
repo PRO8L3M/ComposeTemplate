@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun UserOverview() {
-
-    UserOverviewPage(id = 1)
+fun UserOverview(userId: Int) {
+    //todo pass User as argument
+    UserOverviewPage(id = userId.toLong())
 }
 
 @Composable
